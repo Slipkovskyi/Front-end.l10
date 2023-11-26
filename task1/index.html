@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Збереження форми</title>
+</head>
+<body>
+
+<form id="myForm">
+    <label for="name">Ім'я:</label>
+    <input type="text" id="name" name="name">
+    <br>
+    <label for="email">Електронна пошта:</label>
+    <input type="email" id="email" name="email">
+    <br>
+    <label for="message">Повідомлення:</label>
+    <textarea id="message" name="message"></textarea>
+    <br>
+    <label for="checkbox">Підтвердження:</label>
+    <input type="checkbox" id="checkbox" name="checkbox">
+    <br>
+    <label for="radio1">Опція 1:</label>
+    <input type="radio" id="radio1" name="radio" value="option1">
+    <br>
+    <label for="radio2">Опція 2:</label>
+    <input type="radio" id="radio2" name="radio" value="option2">
+    <br>
+    <label for="select">Виберіть опцію:</label>
+    <select id="select" name="select">
+        <option value="option1">Опція 1</option>
+        <option value="option2">Опція 2</option>
+        <option value="option3">Опція 3</option>
+    </select>
+    <br>
+
+    <!-- Додайте інші поля форми за необхідності -->
+</form>
+
+<script>
+    // Функція для збереження значень полів у локальному сховищі
+    function saveForm() {
+        var formData = {};
+
+        // Отримати значення полів форми
+        formData.name = document.getElementById('name').value;
+        formData.email = document.getElementById('email').value;
+        formData.message = document.getElementById('message').value;
+        formData.checkbox = document.getElementById('checkbox').checked;
+        formData.radio = document.querySelector('input[name="radio"]:checked') ? document.querySelector('input[name="radio"]:checked').value : null;
+        formData.select = document.getElementById('select').value;
+
+        // Зберегти дані у локальному сховищі
+        localStorage.setItem('formData', JSON.stringify(formData));
+    }
+
+    // Функція для встановлення збережених значень при завантаженні сторінки
+    window.onload = function() {
+        var storedData = localStorage.getItem('formData');
+
+        if (storedData) {
+            // Розпакувати збережені дані
+            var formData = JSON.parse(storedData);
+
+            // Встановити значення полів форми
+            document.getElementById('name').value = formData.name;
+            document.getElementById('email').value = formData.email;
+            document.getElementById('message').value = formData.message;
+            document.getElementById('checkbox').checked = formData.checkbox;
+
+            if (formData.radio) {
+                document.getElementById('radio1').checked = formData.radio === 'option1';
+                document.getElementById('radio2').checked = formData.radio === 'option2';
+            }
+
+            document.getElementById('select').value = formData.select;
+
+            // Встановіть інші поля форми за необхідності
+        }
+    };
+
+    // Слухач подій для полів форми
+    var formFields = document.getElementById('myForm').elements;
+    for (var i = 0; i < formFields.length; i++) {
+        formFields[i].addEventListener('input', saveForm);
+    }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>4</title></head>
+<p>При створенні об'єкта (кнопка draw) малюється фігура певного розміру зкількістю кольору, що дорівнює змінній
+    total.Кожна нова фігура витрачає певну кількість фарби і настане момент, колифарби не залишиться.При натисканні
+    кнопки fill кількість фарби поповнюється на 100%.Продемонструвати роботу методів.</p>
+<button id="draw">draw</button>
+<button id="fill">fill</button>
+<div id="container"></div>
+</body>
+<script>
+    class Shape {
+        static total = 100;
+
+        constructor(a) {
+            this.a = a;
+        }
+
+        static fill() {
+            Shape.total = 100;
+        }
+
+        draw() {
+            let quad = document.createElement("div")
+            quad.style.width = "30px"
+            quad.style.height = "30px"
+            quad.style.backgroundColor = 'red'
+            quad.style.opacity = Shape.total + "%"
+            Shape.total -= 10;
+            return quad
+        }
+    }
+
+    let btnDraw = document.querySelector("#draw")
+    let btnFill = document.querySelector("#fill")
+    let cont = document.querySelector("#container")
+    btnDraw.addEventListener("click", function () {
+        let s = new Shape(100)
+        container.appendChild(s.draw())
+    })
+    btnFill.addEventListener("click", function () {
+        Shape.fill()
+    })
+</script>
+</html>

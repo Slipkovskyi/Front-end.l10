@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image Viewer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 50px auto;
+      text-align: center;
+    }
+
+    img {
+      max-width: 100px;
+      margin: 10px;
+      cursor: pointer;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    img:hover {
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    #message {
+      color: green;
+    }
+
+    #error {
+      color: red;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <input type="text" id="fileInput" placeholder="Введіть масив JSON">
+  <button onclick="showImages()">Показати зображення</button>
+  <div id="imageContainer"></div>
+  <span id="message"></span>
+  <div id="error"></div>
+</div>
+<script>
+  function showImages() {
+    const fileInput = document.getElementById('fileInput');
+    const imageContainer = document.getElementById('imageContainer');
+    const message = document.getElementById('message');
+    const error = document.getElementById('error');
+
+    try {
+      const files = JSON.parse(fileInput.value);
+      if (!Array.isArray(files)) {
+        throw new Error('Input is not a valid JSON array.');
+      }
+
+      imageContainer.innerHTML = ''; // Clear previous images
+
+      files.forEach((file) => {
+        const imgElement = document.createElement('img');
+        imgElement.src = file.trim();
+        imgElement.alt = 'Image';
+        imgElement.addEventListener('click', () => toggleImageSize(imgElement));
+        imageContainer.appendChild(imgElement);
+      });
+
+      // Reset messages
+      message.textContent = 'OK';
+      error.textContent = '';
+    } catch (err) {
+      message.textContent = '';
+      error.textContent = err.message;
+    }
+  }
+
+  function toggleImageSize(imgElement) {
+    if (imgElement.style.transform === 'scale(1.5)') {
+      imgElement.style.transform = 'scale(1)';
+    } else {
+      imgElement.style.transform = 'scale(1.5)';
+    }
+  }
+</script>
+</body>
+</html>

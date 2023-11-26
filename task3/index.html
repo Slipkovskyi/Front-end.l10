@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Table</title>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 50%;
+        }
+
+        th, td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+
+        tbody{
+            color:  #3d813d;
+        }
+
+        thead {
+            background-color: #3d813d; /* Змініть колір на ваш вибір */
+            color: white !important;
+        }
+
+        .green-text{
+            color: #3d813d;
+        }
+
+    </style>
+</head>
+<body>
+
+<div id="listOfStudents"></div>
+<div id="styledTable"></div>
+
+<script>
+    class Student {
+        constructor(lastName, firstName, math, history, JS, avg) {
+            this.lastName = lastName;
+            this.firstName = firstName;
+            this.math = math;
+            this.history = history;
+            this.JS = JS;
+            this.avg = avg;
+        }
+    }
+
+    class ListOfStudents {
+        constructor(students) {
+            this.students = students;
+        }
+
+        getTableList() {
+            let table = '<table border="1"><thead><tr><th>lastName</th><th>firstName</th><th>math</th><th>history</th><th>JS</th><th>avg</th></tr></thead>';
+            for (let student of this.students) {
+                table += `<tbody><tr><td>${student.lastName}</td><td>${student.firstName}</td><td>${student.math}</td><td>${student.history}</td><td>${student.JS}</td><td>${student.avg}</td></tr></tbody>`;
+            }
+            table += '</table>';
+            table += '<br><span class="green-text">Total avg of group: ' + this.getTotalAvg() + '</span><br>';
+            return table;
+        }
+
+        getTotalAvg() {
+            let totalAvg = 0;
+            for (let student of this.students) {
+                totalAvg += Number(student.avg);
+            }
+            return (totalAvg / this.students.length).toFixed(2);
+        }
+    }
+
+    class StylesTable extends ListOfStudents {
+        getStyles() {
+            return 'table { border-collapse: collapse; width: 50%; } th, td { border: 1px solid black; padding: 8px; text-align: left; }';
+        }
+
+        getTableList() {
+            const parentTable = super.getTableList();
+            const styles = this.getStyles();
+            return `<style>${styles}</style>${parentTable}`;
+        }
+
+        getAvgForPerson() {
+            for (let student of this.students) {
+                student.avg = ((student.math + student.history + student.JS) / 3).toFixed(2);
+            }
+        }
+
+    }
+
+    // Example usage
+    const students = [
+        new Student('Doe', 'John', 5, 5, 5,),
+        new Student('Smith', 'Jane', 4, 2, 2,),
+        new Student('Smith', 'Jane', 4, 4, 5,),
+        // Add more students as needed
+    ];
+
+    const styledTable = new StylesTable(students);
+    styledTable.getAvgForPerson();
+    document.getElementById('styledTable').innerHTML = styledTable.getTableList();
+</script>
+
+</body>
+</html>
